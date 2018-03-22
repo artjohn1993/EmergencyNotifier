@@ -17,7 +17,7 @@ class SetNumberActivity : AppCompatActivity() {
         confirm.setOnClickListener {
 
             if (phoneNumberEdit.text.toString().length > 0 ){
-                var user = User(phoneNumberEdit.text.toString())
+                var user = User(phoneNumberEdit.text.toString(),"anonymous")
                 var db = DataBaseHandler(this)
                 var result = db.insertData(user)
                 if(result.equals(true)){

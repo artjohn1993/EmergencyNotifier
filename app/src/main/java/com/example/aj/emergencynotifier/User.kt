@@ -6,9 +6,10 @@ package com.example.aj.emergencynotifier
 class User {
     var id : Int = 0
     var number : String = ""
-    constructor(number : String){
+    var name : String = ""
+    constructor(number : String, name : String){
         this.number = number
-
+        this.name = name
     }
     constructor(){}
 }

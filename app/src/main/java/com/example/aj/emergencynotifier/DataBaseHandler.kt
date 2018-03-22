@@ -7,20 +7,23 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.support.design.widget.TabLayout
 import android.widget.Toast
 import org.jetbrains.anko.db.createTable
+import org.jetbrains.anko.db.update
 
 /**
  * Created by AJ on 16/03/2018.
  */
-val DATABASE_NAME = "MyDB"
-val TABLE_NAME = "User"
+val DATABASE_NAME = "Ayuda"
+val TABLE_NAME = "UserInfo"
 val COL_ID = "id"
 val COL_NUMBER = "number"
+val COL_NAME = "name"
 
 class DataBaseHandler(context: Context) : SQLiteOpenHelper(context , DATABASE_NAME,null,1){
     val context = context
     override fun onCreate(db: SQLiteDatabase?) {
         val createTable =  "CREATE TABLE " + TABLE_NAME +" (" +
                 COL_ID + " INTEGER PRIMARY KEY," +
+                COL_NAME + " VARCHAR(100)," +
                 COL_NUMBER + " VARCHAR(100))"
         db?.execSQL(createTable)
     }
@@ -32,7 +35,9 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context , DATABASE_NA
         var success : Boolean
         val db = this.writableDatabase
         var cv = ContentValues()
+        cv.put(COL_NAME,user.name)
         cv.put(COL_NUMBER,user.number)
+
         var result = db.insert(TABLE_NAME,null,cv)
         if(result == (-1).toLong())
         {
@@ -41,11 +46,11 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context , DATABASE_NA
         else
         {
             success = true
-
         }
+        db.close()
         return success
     }
-    fun update(number : String){
+    fun update(number : String, name: String){
         val db = this.readableDatabase
         var query = "Select *  from " + TABLE_NAME
         val result = db.rawQuery(query,null)
@@ -53,13 +58,11 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context , DATABASE_NA
             do{
                 var cv = ContentValues()
                 cv.put(COL_NUMBER,number)
-                db.update(TABLE_NAME,cv, COL_ID + "=? ",
-                        arrayOf(result.getString(result.getColumnIndex(COL_ID))))
+                cv.put(COL_NAME,name)
+                db.update(TABLE_NAME,cv, "$COL_ID=?",arrayOf(result.getString(result.getColumnIndex(COL_ID))))
             }while (result.moveToNext())
         }
-
-
-
+        db.close()
     }
 
 
@@ -73,6 +76,7 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context , DATABASE_NA
                 var user  = User()
                 user.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
                 user.number = result.getString(result.getColumnIndex(COL_NUMBER))
+                user.name = result.getString(result.getColumnIndex(COL_NAME))
                 list.add(user)
 
             }while (result.moveToNext())
