@@ -36,7 +36,9 @@ dependencies {
 
     //https://android-arsenal.com/details/1/6450
     //get the current location
-    compile'com.github.ankitdubey021:GPSTracker:1.1'
+    compile 'com.github.ankitdubey021:GPSTracker:1.1'
+    compile 'com.github.coyarzun89:fabtransitionactivity:0.2.0'
+
 
 
 }

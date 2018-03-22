@@ -10,8 +10,5 @@ class User {
         this.number = number
 
     }
-    constructor(){
-
-
-    }
+    constructor(){}
 }

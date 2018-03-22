@@ -45,6 +45,24 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context , DATABASE_NA
         }
         return success
     }
+    fun update(number : String){
+        val db = this.readableDatabase
+        var query = "Select *  from " + TABLE_NAME
+        val result = db.rawQuery(query,null)
+        if(result.moveToFirst()){
+            do{
+                var cv = ContentValues()
+                cv.put(COL_NUMBER,number)
+                db.update(TABLE_NAME,cv, COL_ID + "=? ",
+                        arrayOf(result.getString(result.getColumnIndex(COL_ID))))
+            }while (result.moveToNext())
+        }
+
+
+
+    }
+
+
     fun readData() : MutableList<User>{
         var list : MutableList<User> = ArrayList()
         val db = this.readableDatabase
@@ -59,6 +77,7 @@ class DataBaseHandler(context: Context) : SQLiteOpenHelper(context , DATABASE_NA
 
             }while (result.moveToNext())
         }
+        db.close()
         return list
     }
 
